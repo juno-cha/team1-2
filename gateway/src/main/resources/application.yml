@@ -1,0 +1,82 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: rentview
+          uri: http://localhost:8081
+          predicates:
+            - Path=, /dashboards/**
+        - id: payment
+          uri: http://localhost:8082
+          predicates:
+            - Path=/paymentHistories/**, 
+        - id: rent
+          uri: http://localhost:8083
+          predicates:
+            - Path=/rents/**, 
+        - id: renthouse
+          uri: http://localhost:8084
+          predicates:
+            - Path=/managements/**, 
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: rentview
+          uri: http://rentview:8080
+          predicates:
+            - Path=, /dashboards/**
+        - id: payment
+          uri: http://payment:8080
+          predicates:
+            - Path=/paymentHistories/**, 
+        - id: rent
+          uri: http://rent:8080
+          predicates:
+            - Path=/rents/**, 
+        - id: renthouse
+          uri: http://renthouse:8080
+          predicates:
+            - Path=/managements/**, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
